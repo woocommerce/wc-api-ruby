@@ -37,14 +37,17 @@ module WooCommerce
     # Returns the oauth signature String.
     def generate_oauth_signature(params)
         base_request_uri = CGI::escape(@url.to_s)
+          .gsub("%5B", "%255B")
+          .gsub("%5D", "%255D")
+          .gsub("%3F", "&")
         query_params = []
         params.each do |key, value|
           query_params.push(CGI::escape(key.to_s) + "%3D" + CGI::escape(value.to_s))
         end
 
         query_string = query_params.join("%26")
-
-        string_to_sign = "#{@method}&#{base_request_uri}&#{query_string}"
+        separator = base_request_uri.include?("&") ? "%26" : "&"
+        string_to_sign = "#{@method}&#{base_request_uri}#{separator}#{query_string}"
 
         if @version == "v3"
           consumer_secret = "#{@consumer_secret}&"
