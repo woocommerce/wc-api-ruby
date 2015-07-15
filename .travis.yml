@@ -7,5 +7,4 @@ rvm:
  - ruby-head
  - jruby
  - rbx-2
-before_script: gem list minitest
-script: rake test
+script: bundle exec rake test
