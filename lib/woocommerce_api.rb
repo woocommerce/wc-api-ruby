@@ -107,9 +107,7 @@ module WooCommerce
         })
       else
         oauth = WooCommerce::OAuth.new url, method, @version, @consumer_key, @consumer_secret
-        options.merge!({
-          query: oauth.get_oauth_params
-        })
+        url = oauth.get_oauth_url
       end
 
       if data

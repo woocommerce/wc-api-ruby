@@ -1,5 +1,6 @@
 require "digest/sha1"
 require "cgi"
+require "uri"
 require "base64"
 require "openssl"
 
@@ -14,18 +15,31 @@ module WooCommerce
       @consumer_secret = consumer_secret
     end
 
-    # Public: Get OAuth params
+    # Public: Get OAuth url
     #
-    # Returns the params Hash.
-    def get_oauth_params
+    # Returns the OAuth url.
+    def get_oauth_url
       params = {}
-      params[:oauth_consumer_key] = @consumer_key
-      params[:oauth_nonce] = Digest::SHA1.hexdigest(Time.new.to_s)
-      params[:oauth_signature_method] = "HMAC-SHA256"
-      params[:oauth_timestamp] = Time.new.to_i
-      params[:oauth_signature] = generate_oauth_signature(params)
+      url = @url
 
-      params
+      if url.include?("?")
+        parsed_url = URI::parse(url)
+        CGI::parse(parsed_url.query).each do |key, value|
+          params[key] = value[0]
+        end
+
+        url = "#{parsed_url.scheme}://#{parsed_url.host}#{parsed_url.path}"
+      end
+
+      params["oauth_consumer_key"] = @consumer_key
+      params["oauth_nonce"] = Digest::SHA1.hexdigest("#{Time.new.to_i + rand(99999)}")
+      params["oauth_signature_method"] = "HMAC-SHA256"
+      params["oauth_timestamp"] = Time.new.to_i
+      params["oauth_signature"] = generate_oauth_signature(params, url)
+
+      query_string = URI::encode(params.map{|key, value| "#{key}=#{value}"}.join("&"))
+
+      "#{url}?#{query_string}"
     end
 
     protected
@@ -33,21 +47,22 @@ module WooCommerce
     # Internal: Generate the OAuth Signature
     #
     # params - A Hash with the OAuth params.
+    # url    - A String with a URL
     #
     # Returns the oauth signature String.
-    def generate_oauth_signature(params)
-      base_request_uri = CGI::escape(@url.to_s)
-        .gsub("%5B", "%255B")
-        .gsub("%5D", "%255D")
-        .gsub("%3F", "&")
+    def generate_oauth_signature params, url
+      base_request_uri = CGI::escape(url.to_s)
       query_params = []
-      params.each do |key, value|
+
+      params.sort.map do |key, value|
         query_params.push(CGI::escape(key.to_s) + "%3D" + CGI::escape(value.to_s))
       end
 
-      query_string = query_params.join("%26")
-      separator = base_request_uri.include?("&") ? "%26" : "&"
-      string_to_sign = "#{@method}&#{base_request_uri}#{separator}#{query_string}"
+      query_string = query_params
+        .join("%26")
+        .gsub("%5B", "%255B")
+        .gsub("%5D", "%255D")
+      string_to_sign = "#{@method}&#{base_request_uri}&#{query_string}"
 
       if @version == "v3"
         consumer_secret = "#{@consumer_secret}&"
