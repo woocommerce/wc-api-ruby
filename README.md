@@ -1,0 +1,98 @@
+# WooCommerce API - Ruby Client
+
+A Ruby wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API using this library.
+
+[![npm version](https://img.shields.io/gem/v/formatador.svg)](https://rubygems.org/gems/woocommerce_api)
+
+## Installation
+
+```
+gem install woocommerce_api
+```
+
+## Getting started
+
+Generate API credentials (Consumer Key & Consumer Secret) following this instructions <http://docs.woothemes.com/document/woocommerce-rest-api/>
+.
+
+Check out the WooCommerce API endpoints and data that can be manipulated in <http://woothemes.github.io/woocommerce-rest-api-docs/>.
+
+## Setup
+
+```ruby
+require "woocommerce_api"
+
+woocommerce = WooCommerce::API.new(
+  "http://example.com",
+  "ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+)
+```
+
+### Options
+
+|       Option      |   Type   | Required |               Description                |
+| ----------------- | -------- | -------- | ---------------------------------------- |
+| `url`             | `String` | yes      | Your Store URL, example: http://woo.dev/ |
+| `consumer_key`    | `String` | yes      | Your API consumer key                    |
+| `consumer_secret` | `String` | yes      | Your API consumer secret                 |
+| `args`            | `Hash`   | no       | Extra arguments (see Args options table) |
+
+#### Args options
+
+|    Option    |   Type   | Required |                                             Description                                             |
+| ------------ | -------- | -------- | --------------------------------------------------------------------------------------------------- |
+| `version`    | `String` | no       | API version, default is `v3`                                                                        |
+| `verify_ssl` | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates |
+
+## Methods
+
+|   Params   |    Type    |                         Description                          |
+| ---------- | ---------- | ------------------------------------------------------------ |
+| `endpoint` | `String`   | WooCommerce API endpoint, example: `customers` or `order/12` |
+| `data`     | `Object`   | JS object, will be converted to JSON                         |
+| `callback` | `Function` | Callback function. Returns `err`, `data` and `res`           |
+
+### GET
+
+- `.get(endpoint)`
+
+### POST
+
+- `.post(endpoint, data)`
+
+### PUT
+
+- `.put(endpoint, data)`
+
+### DELETE
+
+- `.delete(endpoint)`
+
+#### Response
+
+All methods will return [HTTPary::Response](https://github.com/jnunemaker/httparty) object.
+
+```ruby
+response = api.get "customers"
+
+puts response.parsed_response # A Hash of the parsed JSON response
+# Example: {"customers"=>[{"id"=>8, "created_at"=>"2015-05-06T17:43:51Z", "email"=>
+
+puts response.code # A Interger of the HTTP code response
+# Example: 200
+
+puts response.headers["x-wc-total"] # Total of items
+# Example: 2
+
+puts response.headers["x-wc-totalpages"] # Total of pages
+# Example: 1
+```
+
+## Release History
+
+- 2015-07-15 - 0.0.1 - Beta release.
+
+## TODO
+
+- Unit Tests
