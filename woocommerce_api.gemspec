@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- encoding: utf-8 -*-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "rubygems"
@@ -23,4 +23,5 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_dependency "httparty"
+  s.add_dependency "json"
 end
