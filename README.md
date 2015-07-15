@@ -2,7 +2,7 @@
 
 A Ruby wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API using this library.
 
-[![npm version](https://img.shields.io/gem/v/formatador.svg)](https://rubygems.org/gems/woocommerce_api)
+[![npm version](https://img.shields.io/gem/v/woocommerce_api.svg)](https://rubygems.org/gems/woocommerce_api)
 
 ## Installation
 
