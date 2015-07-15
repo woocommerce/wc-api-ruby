@@ -9,5 +9,4 @@ rvm:
  - ruby-head
  - jruby
  - rbx-2
-before_script: bundle update
 script: rake test
