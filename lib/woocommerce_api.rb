@@ -1,10 +1,11 @@
 require "httparty"
 require "json"
+
+require "woocommerce_api/oauth"
 require "woocommerce_api/version"
 
 module WooCommerce
   class API
-    include HTTParty
 
     def initialize url, consumer_key, consumer_secret, args = {}
       # Required args
@@ -29,7 +30,7 @@ module WooCommerce
     #
     # Returns the request Hash.
     def get endpoint
-      self.class.get get_url(endpoint), request_options
+      do_request :get, endpoint
     end
 
     # Public: POST requests.
@@ -39,7 +40,7 @@ module WooCommerce
     #
     # Returns the request Hash.
     def post endpoint, data
-      self.class.post get_url(endpoint), request_options(data)
+      do_request :post, endpoint, data
     end
 
     # Public: PUT requests.
@@ -49,7 +50,7 @@ module WooCommerce
     #
     # Returns the request Hash.
     def put endpoint, data
-      self.class.put get_url(endpoint), request_options(data)
+      do_request :put, endpoint, data
     end
 
     # Public: DELETE requests.
@@ -58,7 +59,7 @@ module WooCommerce
     #
     # Returns the request Hash.
     def delete endpoint
-      self.class.delete get_url(endpoint), request_options
+      do_request :delete, endpoint
     end
 
     protected
@@ -79,8 +80,14 @@ module WooCommerce
 
     # Internal: Requests default options.
     #
-    # Returns the options Hash.
-    def request_options data = nil
+    # method   - A String maning the request method
+    # endpoint - A String naming the request endpoint.
+    # data     - The Hash data for the request.
+    #
+    # Returns the response in JSON String.
+    def do_request method, endpoint, data = nil
+      url = get_url endpoint
+
       options = {
         format: :json,
         verify: @verify_ssl,
@@ -98,6 +105,11 @@ module WooCommerce
             password: @consumer_secret
           }
         })
+      else
+        oauth = WooCommerce::OAuth.new url, method, @version, @consumer_key, @consumer_secret
+        options.merge!({
+          query: oauth.get_oauth_params
+        })
       end
 
       if data
@@ -106,7 +118,7 @@ module WooCommerce
         })
       end
 
-      options
+      HTTParty.send method, url, options
     end
 
   end
