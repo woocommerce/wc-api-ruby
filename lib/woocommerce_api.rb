@@ -6,11 +6,20 @@ module WooCommerce
   class API
     include HTTParty
 
-    def initialize url, consumer_key, consumer_secret, version = "v3"
+    def initialize url, consumer_key, consumer_secret, args = {}
+      # Required args
       @url = url
       @consumer_key = consumer_key
       @consumer_secret = consumer_secret
-      @version = version
+
+      # Optional args
+      defaults = {version: "v3", verify_ssl: true}
+      args = defaults.merge(args)
+
+      @version = args[:version]
+      @verify_ssl = args[:verify_ssl] == true
+
+      # Internal args
       @is_ssl = @url.start_with? "https"
     end
 
@@ -74,7 +83,7 @@ module WooCommerce
     def request_options data = nil
       options = {
         format: :json,
-        verify: false,
+        verify: @verify_ssl,
         headers: {
           "User-Agent" => "WooCommerce API Client-Ruby/#{WooCommerce::VERSION}",
           "Content-Type" => "application/json;charset=utf-8",
