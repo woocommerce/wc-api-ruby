@@ -2,6 +2,7 @@
 
 A Ruby wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API using this library.
 
+[![build status](https://secure.travis-ci.org/woothemes/wc-api-ruby.svg)](http://travis-ci.org/woothemes/wc-api-ruby)
 [![gem version](https://badge.fury.io/rb/woocommerce_api.svg)](https://rubygems.org/gems/woocommerce_api)
 
 ## Installation
@@ -91,6 +92,7 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
+- 2015-07-15 - 1.0.0 - Stable release.
 - 2015-07-15 - 0.0.1 - Beta release.
 
 ## TODO
