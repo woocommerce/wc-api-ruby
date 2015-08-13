@@ -35,7 +35,7 @@ module WooCommerce
       params["oauth_nonce"] = Digest::SHA1.hexdigest("#{Time.new.to_i + rand(99999)}")
       params["oauth_signature_method"] = "HMAC-SHA256"
       params["oauth_timestamp"] = Time.new.to_i
-      params["oauth_signature"] = generate_oauth_signature(params, url)
+      params["oauth_signature"] = CGI::escape(generate_oauth_signature(params, url))
 
       query_string = URI::encode(params.map{|key, value| "#{key}=#{value}"}.join("&"))
 
