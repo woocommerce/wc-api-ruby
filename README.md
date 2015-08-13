@@ -92,6 +92,7 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
+- 2015-08-12 - 1.0.2 - Fixed the release date.
 - 2015-08-12 - 1.0.1 - Escaped oauth_signature in url query string.
 - 2015-07-15 - 1.0.0 - Stable release.
 - 2015-07-15 - 0.0.1 - Beta release.
