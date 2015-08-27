@@ -71,6 +71,11 @@ module WooCommerce
       return Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), consumer_secret, string_to_sign))
     end
 
+    # Internal: Encode param
+    #
+    # text - A String to be encoded
+    #
+    # Returns the encoded String.
     def encode_param(text)
       CGI::escape(text).gsub('%', '%25')
     end
