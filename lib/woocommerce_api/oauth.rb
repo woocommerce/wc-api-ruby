@@ -55,13 +55,11 @@ module WooCommerce
       query_params = []
 
       params.sort.map do |key, value|
-        query_params.push(CGI::escape(key.to_s) + "%3D" + CGI::escape(value.to_s))
+        query_params.push(encode_param(key.to_s) + "%3D" + encode_param(value.to_s))
       end
 
       query_string = query_params
         .join("%26")
-        .gsub("%5B", "%255B")
-        .gsub("%5D", "%255D")
       string_to_sign = "#{@method}&#{base_request_uri}&#{query_string}"
 
       if @version == "v3"
@@ -71,6 +69,10 @@ module WooCommerce
       end
 
       return Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), consumer_secret, string_to_sign))
+    end
+
+    def encode_param(text)
+      CGI::escape(text).gsub('%', '%25')
     end
   end
 end
