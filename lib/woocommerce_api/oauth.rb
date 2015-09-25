@@ -28,7 +28,7 @@ module WooCommerce
           params[key] = value[0]
         end
 
-        url = "#{parsed_url.scheme}://#{parsed_url.host}#{parsed_url.path}"
+        url = "#{parsed_url.scheme}://#{parsed_url.host}:#{parsed_url.port}#{parsed_url.path}"
       end
 
       params["oauth_consumer_key"] = @consumer_key
