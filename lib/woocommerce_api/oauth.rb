@@ -6,13 +6,17 @@ require "openssl"
 
 module WooCommerce
   class OAuth
+    class InvalidSignatureMethodError < StandardError; end
 
-    def initialize url, method, version, consumer_key, consumer_secret
+    DEFAULT_SIGNATURE_METHOD = 'HMAC-SHA256'
+
+    def initialize(url, method, version, consumer_key, consumer_secret, signature_method)
       @url = url
       @method = method.upcase
       @version = version
       @consumer_key = consumer_key
       @consumer_secret = consumer_secret
+      @signature_method = signature_method || DEFAULT_SIGNATURE_METHOD
     end
 
     # Public: Get OAuth url
@@ -33,7 +37,7 @@ module WooCommerce
 
       params["oauth_consumer_key"] = @consumer_key
       params["oauth_nonce"] = Digest::SHA1.hexdigest("#{Time.new.to_i + rand(99999)}")
-      params["oauth_signature_method"] = "HMAC-SHA256"
+      params["oauth_signature_method"] = @signature_method
       params["oauth_timestamp"] = Time.new.to_i
       params["oauth_signature"] = CGI::escape(generate_oauth_signature(params, url))
 
@@ -68,7 +72,19 @@ module WooCommerce
         consumer_secret = @consumer_secret
       end
 
-      return Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), consumer_secret, string_to_sign))
+      return Base64.strict_encode64(OpenSSL::HMAC.digest(digest, consumer_secret, string_to_sign))
+    end
+
+    # Internal: Digest object based on signature method
+    #
+    # Returns a digest object.
+    def digest
+      case @signature_method
+      when 'HMAC-SHA256' then OpenSSL::Digest.new('sha256')
+      when 'HMAC-SHA1' then OpenSSL::Digest.new('sha1')
+      else
+        fail InvalidSignatureMethodError
+      end
     end
 
     # Internal: Encode param

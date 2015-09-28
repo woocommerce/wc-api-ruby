@@ -19,6 +19,7 @@ module WooCommerce
 
       @version = args[:version]
       @verify_ssl = args[:verify_ssl] == true
+      @signature_method = args[:signature_method]
 
       # Internal args
       @is_ssl = @url.start_with? "https"
@@ -80,7 +81,7 @@ module WooCommerce
 
     # Internal: Requests default options.
     #
-    # method   - A String maning the request method
+    # method   - A String naming the request method
     # endpoint - A String naming the request endpoint.
     # data     - The Hash data for the request.
     #
@@ -106,8 +107,7 @@ module WooCommerce
           }
         })
       else
-        oauth = WooCommerce::OAuth.new url, method, @version, @consumer_key, @consumer_secret
-        url = oauth.get_oauth_url
+        url = oauth_url(url, method)
       end
 
       if data
@@ -119,5 +119,20 @@ module WooCommerce
       HTTParty.send method, url, options
     end
 
+    # Internal: Generates an oauth url given current settings
+    #
+    # url    - A String naming the current request url
+    # method - The HTTP verb of the request
+    #
+    # Returns a url to be used for the query.
+    def oauth_url(url, method)
+      oauth = WooCommerce::OAuth.new(url,
+                                     method,
+                                     @version,
+                                     @consumer_key,
+                                     @consumer_secret,
+                                     @signature_method)
+      oauth.get_oauth_url
+    end
   end
 end
