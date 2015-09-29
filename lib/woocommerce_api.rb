@@ -28,10 +28,11 @@ module WooCommerce
     # Public: GET requests.
     #
     # endpoint - A String naming the request endpoint.
+    # data     - The Hash data for the request.
     #
     # Returns the request Hash.
-    def get endpoint
-      do_request :get, endpoint
+    def get endpoint, data = nil
+      do_request :get, endpoint, data
     end
 
     # Public: POST requests.
@@ -57,10 +58,11 @@ module WooCommerce
     # Public: DELETE requests.
     #
     # endpoint - A String naming the request endpoint.
+    # data     - The Hash data for the request.
     #
     # Returns the request Hash.
-    def delete endpoint
-      do_request :delete, endpoint
+    def delete endpoint, data = nil
+      do_request :delete, endpoint, data
     end
 
     protected
@@ -72,10 +74,7 @@ module WooCommerce
     # Returns the endpoint String.
     def get_url endpoint
       url = @url
-      if !url.end_with? "/"
-        url = "#{url}/"
-      end
-
+      url = "#{url}/" unless url.end_with? "/"
       "#{url}wc-api/#{@version}/#{endpoint}"
     end
 
