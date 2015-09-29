@@ -28,6 +28,7 @@ module WooCommerce
     # Public: GET requests.
     #
     # endpoint - A String naming the request endpoint.
+    # data     - The Hash data for the request.
     #
     # Returns the request Hash.
     def get endpoint, data = nil
@@ -57,6 +58,7 @@ module WooCommerce
     # Public: DELETE requests.
     #
     # endpoint - A String naming the request endpoint.
+    # data     - The Hash data for the request.
     #
     # Returns the request Hash.
     def delete endpoint, data = nil
@@ -65,6 +67,12 @@ module WooCommerce
 
     protected
 
+    # Internal: Appends data as query params onto an endpoint
+    #
+    # endpoint - A String naming the request endpoint.
+    # data     - A hash of data to flatten and append
+    #
+    # Returns an endpoint string with the data appended
     def add_query_params(endpoint, data)
       return endpoint if data.nil? || data.empty?
       endpoint += '?' unless endpoint.include? '?'
@@ -75,6 +83,7 @@ module WooCommerce
     # Internal: Get URL for requests
     #
     # endpoint - A String naming the request endpoint.
+    # method   - The method used in the url (for oauth querys)
     #
     # Returns the endpoint String.
     def get_url endpoint, method
@@ -133,6 +142,11 @@ module WooCommerce
       oauth.get_oauth_url
     end
 
+    # Internal: Flattens a hash into an array of query relations
+    #
+    # hash - A hash to flatten
+    #
+    # Returns an array full of key value paired strings
     def flatten_hash(hash)
       hash.flat_map do |key, value|
         case value
