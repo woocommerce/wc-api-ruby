@@ -30,8 +30,8 @@ module WooCommerce
     # endpoint - A String naming the request endpoint.
     #
     # Returns the request Hash.
-    def get endpoint
-      do_request :get, endpoint
+    def get endpoint, data = nil
+      do_request :get, add_query_params(endpoint, data)
     end
 
     # Public: POST requests.
@@ -59,24 +59,29 @@ module WooCommerce
     # endpoint - A String naming the request endpoint.
     #
     # Returns the request Hash.
-    def delete endpoint
-      do_request :delete, endpoint
+    def delete endpoint, data = nil
+      do_request :delete, add_query_params(endpoint, data)
     end
 
     protected
+
+    def add_query_params(endpoint, data)
+      return endpoint if data.nil? || data.empty?
+      endpoint += '?' unless endpoint.include? '?'
+      endpoint += '&' unless endpoint.end_with? '?'
+      endpoint + URI.encode(flatten_hash(data).join('&'))
+    end
 
     # Internal: Get URL for requests
     #
     # endpoint - A String naming the request endpoint.
     #
     # Returns the endpoint String.
-    def get_url endpoint
+    def get_url endpoint, method
       url = @url
-      if !url.end_with? "/"
-        url = "#{url}/"
-      end
-
-      "#{url}wc-api/#{@version}/#{endpoint}"
+      url = "#{url}/" unless url.end_with? "/"
+      url = "#{url}wc-api/#{@version}/#{endpoint}"
+      @is_ssl ? ssl_url(url) : oauth_url(url, method)
     end
 
     # Internal: Requests default options.
@@ -86,9 +91,8 @@ module WooCommerce
     # data     - The Hash data for the request.
     #
     # Returns the response in JSON String.
-    def do_request method, endpoint, data = nil
-      url = get_url endpoint
-
+    def do_request method, endpoint, data = {}
+      url = get_url(endpoint, method)
       options = {
         format: :json,
         verify: @verify_ssl,
@@ -98,25 +102,19 @@ module WooCommerce
           "Accept" => "application/json"
         }
       }
+      options.merge!(body: data.to_json) if data
+      HTTParty.send(method, url, options)
+    end
 
-      if @is_ssl
-        options.merge!({
-          basic_auth: {
-            username: @consumer_key,
-            password: @consumer_secret
-          }
-        })
-      else
-        url = oauth_url(url, method)
-      end
-
-      if data
-        options.merge!({
-          body: data.to_json
-        })
-      end
-
-      HTTParty.send method, url, options
+    # Internal: Generates the URL used for ssl connections
+    #
+    # url    - A String naming the current request url
+    #
+    # Returns a url to be used for the query.
+    def ssl_url(url)
+      add_query_params(url,
+                       consumer_key: @consumer_key,
+                       consumer_secret: @consumer_secret)
     end
 
     # Internal: Generates an oauth url given current settings
@@ -133,6 +131,21 @@ module WooCommerce
                                      @consumer_secret,
                                      @signature_method)
       oauth.get_oauth_url
+    end
+
+    def flatten_hash(hash)
+      hash.flat_map do |key, value|
+        case value
+        when Hash
+          value.map do |inner_key, inner_value|
+            "#{key}[#{inner_key}]=#{inner_value}"
+          end
+        when Array
+          value.map { |inner_value| "#{key}[]=#{inner_value}" }
+        else
+          "#{key}=#{value}"
+        end
+      end
     end
   end
 end

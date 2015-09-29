@@ -20,9 +20,9 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_get
-    FakeWeb.register_uri(:get, "https://user:pass@dev.test/wc-api/v3/customers",
-      :body => '{"customers":[]}',
-      :content_type => "application/json"
+    FakeWeb.register_uri(:get, "https://dev.test/wc-api/v3/customers?consumer_key=user&consumer_secret=pass",
+      body: '{"customers":[]}',
+      content_type: "application/json"
     )
     response = @basic_auth.get "customers"
 
@@ -31,8 +31,8 @@ class WooCommerceAPITest < Minitest::Test
 
   def test_oauth_get
     FakeWeb.register_uri(:get, /http:\/\/dev\.test\/wc-api\/v3\/customers\?oauth_consumer_key=user&oauth_nonce=(.*)&(.*)oauth_signature_method=HMAC-SHA256&oauth_timestamp=(.*)/,
-      :body => '{"customers":[]}',
-      :content_type => "application/json"
+      body: '{"customers":[]}',
+      content_type: "application/json"
     )
     response = @oauth.get "customers"
 
@@ -40,10 +40,10 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_post
-    FakeWeb.register_uri(:post, "https://user:pass@dev.test/wc-api/v3/products",
-      :body => '{"products":[]}',
-      :content_type => "application/json",
-      :status => ["201", "Created"]
+    FakeWeb.register_uri(:post, "https://dev.test/wc-api/v3/products?consumer_key=user&consumer_secret=pass",
+      body: '{"products":[]}',
+      content_type: "application/json",
+      status: ["201", "Created"]
     )
 
     data = {
@@ -58,9 +58,9 @@ class WooCommerceAPITest < Minitest::Test
 
   def test_oauth_post
     FakeWeb.register_uri(:post, /http:\/\/dev\.test\/wc-api\/v3\/products\?oauth_consumer_key=user&oauth_nonce=(.*)&(.*)oauth_signature_method=HMAC-SHA256&oauth_timestamp=(.*)/,
-      :body => '{"products":[]}',
-      :content_type => "application/json",
-      :status => ["201", "Created"]
+      body: '{"products":[]}',
+      content_type: "application/json",
+      status: ["201", "Created"]
     )
 
     data = {
@@ -74,9 +74,9 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_put
-    FakeWeb.register_uri(:put, "https://user:pass@dev.test/wc-api/v3/products/1234",
-      :body => '{"customers":[]}',
-      :content_type => "application/json"
+    FakeWeb.register_uri(:put, "https://dev.test/wc-api/v3/products/1234?consumer_key=user&consumer_secret=pass",
+      body: '{"customers":[]}',
+      content_type: "application/json"
     )
 
     data = {
@@ -91,8 +91,8 @@ class WooCommerceAPITest < Minitest::Test
 
   def test_oauth_put
     FakeWeb.register_uri(:put, /http:\/\/dev\.test\/wc-api\/v3\/products\?oauth_consumer_key=user&oauth_nonce=(.*)&(.*)oauth_signature_method=HMAC-SHA256&oauth_timestamp=(.*)/,
-      :body => '{"products":[]}',
-      :content_type => "application/json"
+      body: '{"products":[]}',
+      content_type: "application/json"
     )
 
     data = {
@@ -106,10 +106,10 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_delete
-    FakeWeb.register_uri(:delete, "https://user:pass@dev.test/wc-api/v3/products/1234?force=true",
-      :body => '{"message":"Permanently deleted product"}',
-      :content_type => "application/json",
-      :status => ["202", "Accepted"]
+    FakeWeb.register_uri(:delete, "https://dev.test/wc-api/v3/products/1234?force=true&consumer_key=user&consumer_secret=pass",
+      body: '{"message":"Permanently deleted product"}',
+      content_type: "application/json",
+      status: ["202", "Accepted"]
     )
 
     response = @basic_auth.delete "products/1234?force=true"
@@ -118,17 +118,35 @@ class WooCommerceAPITest < Minitest::Test
     assert_equal '{"message":"Permanently deleted product"}', response.to_json
   end
 
+  def test_basic_auth_delete_with_data_params
+    FakeWeb.register_uri(:delete, "https://dev.test/wc-api/v3/products/1234?force=true&consumer_key=user&consumer_secret=pass",
+      body: '{"message":"Permanently deleted product"}',
+      content_type: "application/json",
+      status: ["202", "Accepted"]
+    )
+
+    response = @basic_auth.delete "products/1234", force: true
+
+    assert_equal 202, response.code
+    assert_equal '{"message":"Permanently deleted product"}', response.to_json
+  end
+
   def test_oauth_put
     FakeWeb.register_uri(:delete, /http:\/\/dev\.test\/wc-api\/v3\/products\/1234\?force=true&oauth_consumer_key=user&oauth_nonce=(.*)&(.*)oauth_signature_method=HMAC-SHA256&oauth_timestamp=(.*)/,
-      :body => '{"message":"Permanently deleted product"}',
-      :content_type => "application/json",
-      :status => ["202", "Accepted"]
+      body: '{"message":"Permanently deleted product"}',
+      content_type: "application/json",
+      status: ["202", "Accepted"]
     )
 
     response = @oauth.delete "products/1234?force=true"
 
     assert_equal 202, response.code
     assert_equal '{"message":"Permanently deleted product"}', response.to_json
+  end
+
+  def test_adding_query_params
+    url = @oauth.send(:add_query_params, 'foo.com', filter: { sku: '123' }, order: 'created_at')
+    assert_equal url, URI.encode('foo.com?filter[sku]=123&order=created_at')
   end
 
   def test_invalid_signature_method
