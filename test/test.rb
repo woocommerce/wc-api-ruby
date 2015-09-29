@@ -130,4 +130,11 @@ class WooCommerceAPITest < Minitest::Test
     assert_equal 202, response.code
     assert_equal '{"message":"Permanently deleted product"}', response.to_json
   end
+
+  def test_invalid_signature_method
+    assert_raises WooCommerce::OAuth::InvalidSignatureMethodError do 
+      client = WooCommerce::API.new("http://dev.test/", "user", "pass", signature_method: 'GARBAGE')
+      client.get 'products'
+    end
+  end
 end
