@@ -20,7 +20,7 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_get
-    FakeWeb.register_uri(:get, "https://dev.test/wc-api/v3/customers?consumer_key=user&consumer_secret=pass",
+    FakeWeb.register_uri(:get, "https://user:pass@dev.test/wc-api/v3/customers",
       body: '{"customers":[]}',
       content_type: "application/json"
     )
@@ -40,7 +40,7 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_post
-    FakeWeb.register_uri(:post, "https://dev.test/wc-api/v3/products?consumer_key=user&consumer_secret=pass",
+    FakeWeb.register_uri(:post, "https://user:pass@dev.test/wc-api/v3/products",
       body: '{"products":[]}',
       content_type: "application/json",
       status: ["201", "Created"]
@@ -74,7 +74,7 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_put
-    FakeWeb.register_uri(:put, "https://dev.test/wc-api/v3/products/1234?consumer_key=user&consumer_secret=pass",
+    FakeWeb.register_uri(:put, "https://user:pass@dev.test/wc-api/v3/products/1234",
       body: '{"customers":[]}',
       content_type: "application/json"
     )
@@ -106,7 +106,7 @@ class WooCommerceAPITest < Minitest::Test
   end
 
   def test_basic_auth_delete
-    FakeWeb.register_uri(:delete, "https://dev.test/wc-api/v3/products/1234?force=true&consumer_key=user&consumer_secret=pass",
+    FakeWeb.register_uri(:delete, "https://user:pass@dev.test/wc-api/v3/products/1234?force=true",
       body: '{"message":"Permanently deleted product"}',
       content_type: "application/json",
       status: ["202", "Accepted"]
@@ -118,8 +118,8 @@ class WooCommerceAPITest < Minitest::Test
     assert_equal '{"message":"Permanently deleted product"}', response.to_json
   end
 
-  def test_basic_auth_delete_with_data_params
-    FakeWeb.register_uri(:delete, "https://dev.test/wc-api/v3/products/1234?force=true&consumer_key=user&consumer_secret=pass",
+  def test_basic_auth_delete_params
+    FakeWeb.register_uri(:delete, "https://user:pass@dev.test/wc-api/v3/products/1234?force=true",
       body: '{"message":"Permanently deleted product"}',
       content_type: "application/json",
       status: ["202", "Accepted"]

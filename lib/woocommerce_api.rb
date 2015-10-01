@@ -111,6 +111,11 @@ module WooCommerce
           "Accept" => "application/json"
         }
       }
+      if @is_ssl
+        options.merge!(basic_auth: {
+                         username: @consumer_key,
+                         password: @consumer_secret })
+      end
       options.merge!(body: data.to_json) if data
       HTTParty.send(method, url, options)
     end
@@ -121,9 +126,7 @@ module WooCommerce
     #
     # Returns a url to be used for the query.
     def ssl_url(url)
-      add_query_params(url,
-                       consumer_key: @consumer_key,
-                       consumer_secret: @consumer_secret)
+      url
     end
 
     # Internal: Generates an oauth url given current settings
