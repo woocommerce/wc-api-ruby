@@ -14,7 +14,11 @@ module WooCommerce
       @consumer_secret = consumer_secret
 
       # Optional args
-      defaults = {version: "v3", verify_ssl: true}
+      defaults = {
+        version: "v3",
+        verify_ssl: true,
+        signature_method: "HMAC-SHA256"
+      }
       args = defaults.merge(args)
 
       @version = args[:version]

@@ -8,15 +8,13 @@ module WooCommerce
   class OAuth
     class InvalidSignatureMethodError < StandardError; end
 
-    DEFAULT_SIGNATURE_METHOD = 'HMAC-SHA256'
-
-    def initialize(url, method, version, consumer_key, consumer_secret, signature_method)
+    def initialize(url, method, version, consumer_key, consumer_secret, signature_method = 'HMAC-SHA256')
       @url = url
       @method = method.upcase
       @version = version
       @consumer_key = consumer_key
       @consumer_secret = consumer_secret
-      @signature_method = signature_method || DEFAULT_SIGNATURE_METHOD
+      @signature_method = signature_method
     end
 
     # Public: Get OAuth url
