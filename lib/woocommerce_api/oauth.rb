@@ -31,7 +31,7 @@ module WooCommerce
         end
         params = Hash[params.sort]
 
-        url = "#{parsed_url.scheme}://#{parsed_url.host}#{parsed_url.path}"
+        url = parsed_url.to_s.gsub(/\?.*/, "")
       end
 
       nonce_lifetime = 15 * 60 # Woocommerce keeps nonces for 15 minutes
