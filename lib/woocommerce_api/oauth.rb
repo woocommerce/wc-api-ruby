@@ -8,7 +8,7 @@ module WooCommerce
   class OAuth
     class InvalidSignatureMethodError < StandardError; end
 
-    def initialize url, method, version, consumer_key, consumer_secret, signature_method = 'HMAC-SHA256'
+    def initialize url, method, version, consumer_key, consumer_secret, signature_method = "HMAC-SHA256"
       @url = url
       @method = method.upcase
       @version = version
@@ -81,8 +81,8 @@ module WooCommerce
     # Returns a digest object.
     def digest
       case @signature_method
-      when 'HMAC-SHA256' then OpenSSL::Digest.new('sha256')
-      when 'HMAC-SHA1' then OpenSSL::Digest.new('sha1')
+      when "HMAC-SHA256" then OpenSSL::Digest.new("sha256")
+      when "HMAC-SHA1" then OpenSSL::Digest.new("sha1")
       else
         fail InvalidSignatureMethodError
       end
@@ -93,8 +93,8 @@ module WooCommerce
     # text - A String to be encoded
     #
     # Returns the encoded String.
-    def encode_param(text)
-      CGI::escape(text).gsub('%', '%25')
+    def encode_param text
+      CGI::escape(text).gsub("%", "%25")
     end
   end
 end
