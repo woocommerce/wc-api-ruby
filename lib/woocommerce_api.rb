@@ -32,11 +32,11 @@ module WooCommerce
     # Public: GET requests.
     #
     # endpoint - A String naming the request endpoint.
-    # data     - The Hash data for the request.
+    # query    - A Hash with query params.
     #
     # Returns the request Hash.
-    def get endpoint, data = nil
-      do_request :get, add_query_params(endpoint, data)
+    def get endpoint, query = nil
+      do_request :get, add_query_params(endpoint, query)
     end
 
     # Public: POST requests.
@@ -62,11 +62,11 @@ module WooCommerce
     # Public: DELETE requests.
     #
     # endpoint - A String naming the request endpoint.
-    # data     - The Hash data for the request.
+    # query    - A Hash with query params.
     #
     # Returns the request Hash.
-    def delete endpoint, data = nil
-      do_request :delete, add_query_params(endpoint, data)
+    def delete endpoint, query = nil
+      do_request :delete, add_query_params(endpoint, query)
     end
 
     protected
@@ -77,8 +77,9 @@ module WooCommerce
     # data     - A hash of data to flatten and append
     #
     # Returns an endpoint string with the data appended
-    def add_query_params(endpoint, data)
+    def add_query_params endpoint, data
       return endpoint if data.nil? || data.empty?
+
       endpoint += '?' unless endpoint.include? '?'
       endpoint += '&' unless endpoint.end_with? '?'
       endpoint + URI.encode(flatten_hash(data).join('&'))
@@ -94,7 +95,8 @@ module WooCommerce
       url = @url
       url = "#{url}/" unless url.end_with? "/"
       url = "#{url}wc-api/#{@version}/#{endpoint}"
-      @is_ssl ? ssl_url(url) : oauth_url(url, method)
+
+      @is_ssl ? url : oauth_url(url, method)
     end
 
     # Internal: Requests default options.
@@ -117,20 +119,12 @@ module WooCommerce
       }
       if @is_ssl
         options.merge!(basic_auth: {
-                         username: @consumer_key,
-                         password: @consumer_secret })
+          username: @consumer_key,
+          password: @consumer_secret
+        })
       end
       options.merge!(body: data.to_json) if data
       HTTParty.send(method, url, options)
-    end
-
-    # Internal: Generates the URL used for ssl connections
-    #
-    # url    - A String naming the current request url
-    #
-    # Returns a url to be used for the query.
-    def ssl_url(url)
-      url
     end
 
     # Internal: Generates an oauth url given current settings
@@ -139,13 +133,15 @@ module WooCommerce
     # method - The HTTP verb of the request
     #
     # Returns a url to be used for the query.
-    def oauth_url(url, method)
-      oauth = WooCommerce::OAuth.new(url,
-                                     method,
-                                     @version,
-                                     @consumer_key,
-                                     @consumer_secret,
-                                     @signature_method)
+    def oauth_url url, method
+      oauth = WooCommerce::OAuth.new(
+        url,
+        method,
+        @version,
+        @consumer_key,
+        @consumer_secret,
+        @signature_method
+      )
       oauth.get_oauth_url
     end
 
@@ -154,7 +150,7 @@ module WooCommerce
     # hash - A hash to flatten
     #
     # Returns an array full of key value paired strings
-    def flatten_hash(hash)
+    def flatten_hash hash
       hash.flat_map do |key, value|
         case value
         when Hash

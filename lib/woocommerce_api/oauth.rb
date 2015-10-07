@@ -8,7 +8,7 @@ module WooCommerce
   class OAuth
     class InvalidSignatureMethodError < StandardError; end
 
-    def initialize(url, method, version, consumer_key, consumer_secret, signature_method = 'HMAC-SHA256')
+    def initialize url, method, version, consumer_key, consumer_secret, signature_method = 'HMAC-SHA256'
       @url = url
       @method = method.upcase
       @version = version
@@ -34,8 +34,9 @@ module WooCommerce
         url = "#{parsed_url.scheme}://#{parsed_url.host}#{parsed_url.path}"
       end
 
-      params["oauth_consumer_key"] = @consumer_key
       nonce_lifetime = 15 * 60 # Woocommerce keeps nonces for 15 minutes
+
+      params["oauth_consumer_key"] = @consumer_key
       params["oauth_nonce"] = Digest::SHA1.hexdigest((Time.new.to_f % nonce_lifetime + (Process.pid * nonce_lifetime)).to_s)
       params["oauth_signature_method"] = @signature_method
       params["oauth_timestamp"] = Time.new.to_i
