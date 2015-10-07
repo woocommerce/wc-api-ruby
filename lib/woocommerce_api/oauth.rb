@@ -31,6 +31,7 @@ module WooCommerce
         CGI::parse(parsed_url.query).each do |key, value|
           params[key] = value[0]
         end
+        params = Hash[params.sort]
 
         url = "#{parsed_url.scheme}://#{parsed_url.host}#{parsed_url.path}"
       end
