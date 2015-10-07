@@ -41,22 +41,23 @@ woocommerce = WooCommerce::API.new(
 
 #### Args options
 
-|    Option    |   Type   | Required |                                             Description                                             |
-| ------------ | -------- | -------- | --------------------------------------------------------------------------------------------------- |
-| `version`    | `String` | no       | API version, default is `v3`                                                                        |
-| `verify_ssl` | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates |
+|       Option       |   Type   | Required |                                                 Description                                                  |
+| ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `version`          | `String` | no       | API version, default is `v3`                                                                                 |
+| `verify_ssl`       | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates          |
+| `signature_method` | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
 
 ## Methods
 
-|   Params   |    Type    |                         Description                          |
-| ---------- | ---------- | ------------------------------------------------------------ |
-| `endpoint` | `String`   | WooCommerce API endpoint, example: `customers` or `order/12` |
-| `data`     | `Object`   | JS object, will be converted to JSON                         |
-| `callback` | `Function` | Callback function. Returns `err`, `data` and `res`           |
+|   Params   |   Type   |                         Description                          |
+| ---------- | -------- | ------------------------------------------------------------ |
+| `endpoint` | `String` | WooCommerce API endpoint, example: `customers` or `order/12` |
+| `data`     | `Hash`   | Only for POST and PUT, data that will be converted to JSON   |
+| `query`    | `Hash`   | Only for GET and DELETE, request query string                |
 
 ### GET
 
-- `.get(endpoint)`
+- `.get(endpoint, query)`
 
 ### POST
 
@@ -68,7 +69,7 @@ woocommerce = WooCommerce::API.new(
 
 ### DELETE
 
-- `.delete(endpoint)`
+- `.delete(endpoint, query)`
 
 #### Response
 
@@ -92,6 +93,7 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
+- 2015-08-27 - 1.1.0 - Added `query` argument for GET and DELETE methods, reduced chance of nonce collisions and added support for urls including ports
 - 2015-08-27 - 1.0.3 - Encode all % characters in query string for OAuth 1.0a.
 - 2015-08-12 - 1.0.2 - Fixed the release date.
 - 2015-08-12 - 1.0.1 - Escaped oauth_signature in url query string.
