@@ -39,6 +39,16 @@ class WooCommerceAPITest < Minitest::Test
     assert_equal 200, response.code
   end
 
+  def test_oauth_get_puts_data_in_alpha_order
+    FakeWeb.register_uri(:get, /http:\/\/dev\.test\/wc-api\/v3\/customers\?abc=123&oauth_consumer_key=user&oauth_d=456&oauth_nonce=(.*)&(.*)oauth_signature_method=HMAC-SHA256&oauth_timestamp=(.*)&xyz=789/,
+      body: '{"customers":[]}',
+      content_type: "application/json"
+    )
+    response = @oauth.get "customers", abc: '123', oauth_d: '456', xyz: '789'
+
+    assert_equal 200, response.code
+  end
+
   def test_basic_auth_post
     FakeWeb.register_uri(:post, "https://user:pass@dev.test/wc-api/v3/products",
       body: '{"products":[]}',
