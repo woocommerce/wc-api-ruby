@@ -24,6 +24,7 @@ module WooCommerce
       @version = args[:version]
       @verify_ssl = args[:verify_ssl] == true
       @signature_method = args[:signature_method]
+      @use_oauth = args[:use_oauth] == true
 
       # Internal args
       @is_ssl = @url.start_with? "https"
@@ -96,7 +97,7 @@ module WooCommerce
       url = "#{url}/" unless url.end_with? "/"
       url = "#{url}wc-api/#{@version}/#{endpoint}"
 
-      @is_ssl ? url : oauth_url(url, method)
+      oauth? ? oauth_url(url, method) : url
     end
 
     # Internal: Requests default options.
@@ -117,7 +118,7 @@ module WooCommerce
           "Accept" => "application/json"
         }
       }
-      if @is_ssl
+      unless oauth?
         options.merge!(basic_auth: {
           username: @consumer_key,
           password: @consumer_secret
@@ -125,6 +126,13 @@ module WooCommerce
       end
       options.merge!(body: data.to_json) if data
       HTTParty.send(method, url, options)
+    end
+
+    # Internal: Determines if oauth should be used
+    #
+    # Retruns true if oauth should be used
+    def oauth?
+      @use_oauth || !@is_ssl
     end
 
     # Internal: Generates an oauth url given current settings
