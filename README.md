@@ -93,6 +93,7 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
+- 2015-08-27 - 1.1.1 - Fixed the encode when have spaces in the URL parameters.
 - 2015-08-27 - 1.1.0 - Added `query` argument for GET and DELETE methods, reduced chance of nonce collisions and added support for urls including ports
 - 2015-08-27 - 1.0.3 - Encode all % characters in query string for OAuth 1.0a.
 - 2015-08-12 - 1.0.2 - Fixed the release date.
