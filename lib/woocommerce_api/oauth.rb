@@ -94,7 +94,7 @@ module WooCommerce
     #
     # Returns the encoded String.
     def encode_param text
-      CGI::escape(text).gsub('+', '%20').gsub("%", "%25")
+      CGI::escape(text).gsub("+", "%20").gsub("%", "%25")
     end
   end
 end
