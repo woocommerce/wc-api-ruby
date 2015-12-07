@@ -80,9 +80,9 @@ module WooCommerce
     def add_query_params endpoint, data
       return endpoint if data.nil? || data.empty?
 
-      endpoint += '?' unless endpoint.include? '?'
-      endpoint += '&' unless endpoint.end_with? '?'
-      endpoint + URI.encode(flatten_hash(data).join('&'))
+      endpoint += "?" unless endpoint.include? "?"
+      endpoint += "&" unless endpoint.end_with? "?"
+      endpoint + URI.encode(flatten_hash(data).join("&"))
     end
 
     # Internal: Get URL for requests
