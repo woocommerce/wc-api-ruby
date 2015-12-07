@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_runtime_dependency "httparty", "<= 0.13"
+  s.add_runtime_dependency "httparty", ">= 0.13.7"
 end
