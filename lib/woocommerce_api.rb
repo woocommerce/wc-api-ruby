@@ -123,7 +123,7 @@ module WooCommerce
           password: @consumer_secret
         })
       end
-      options.merge!(body: data.to_json) if !data.empty?
+      options.merge!(body: data.to_json) if method != :get && !data.empty?
 
       HTTParty.send(method, url, options)
     end
