@@ -73,7 +73,7 @@ woocommerce = WooCommerce::API.new(
 
 #### Response
 
-All methods will return [HTTPary::Response](https://github.com/jnunemaker/httparty) object.
+All methods will return [HTTParty::Response](https://github.com/jnunemaker/httparty) object.
 
 ```ruby
 response = api.get "customers"
