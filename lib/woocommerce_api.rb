@@ -15,12 +15,14 @@ module WooCommerce
 
       # Optional args
       defaults = {
+        wp_api: false,
         version: "v3",
         verify_ssl: true,
         signature_method: "HMAC-SHA256"
       }
       args = defaults.merge(args)
 
+      @wp_api = args[:wp_api]
       @version = args[:version]
       @verify_ssl = args[:verify_ssl] == true
       @signature_method = args[:signature_method]
@@ -101,9 +103,10 @@ module WooCommerce
     #
     # Returns the endpoint String.
     def get_url endpoint, method
+      api = @wp_api ? 'wp-json' : 'wc-api'
       url = @url
       url = "#{url}/" unless url.end_with? "/"
-      url = "#{url}wc-api/#{@version}/#{endpoint}"
+      url = "#{url}#{api}/#{@version}/#{endpoint}"
 
       @is_ssl ? url : oauth_url(url, method)
     end
