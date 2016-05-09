@@ -69,6 +69,15 @@ module WooCommerce
       do_request :delete, add_query_params(endpoint, query)
     end
 
+    # Public: OPTIONS requests.
+    #
+    # endpoint - A String naming the request endpoint.
+    #
+    # Returns the request Hash.
+    def options endpoint
+      do_request :options, add_query_params(endpoint, nil)
+    end
+
     protected
 
     # Internal: Appends data as query params onto an endpoint
