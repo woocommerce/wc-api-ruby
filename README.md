@@ -20,6 +20,8 @@ Check out the WooCommerce API endpoints and data that can be manipulated in <htt
 
 ## Setup
 
+Setup for the old WooCommerce API v3:
+
 ```ruby
 require "woocommerce_api"
 
@@ -27,6 +29,22 @@ woocommerce = WooCommerce::API.new(
   "http://example.com",
   "ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+)
+```
+
+Setup for the new WP REST API integration:
+
+```ruby
+require "woocommerce_api"
+
+woocommerce = WooCommerce::API.new(
+  "http://example.com",
+  "ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  {
+    wp_api: true,
+    version: "wc/v1"
+  }
 )
 ```
 
@@ -42,7 +60,8 @@ woocommerce = WooCommerce::API.new(
 #### Args options
 
 |       Option       |   Type   | Required |                                                 Description                                                  |
-| ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+|--------------------|----------|----------|--------------------------------------------------------------------------------------------------------------|
+| `wp_api`           | `Bool`   | no       | Allow requests to the WP REST API                                                                            |
 | `version`          | `String` | no       | API version, default is `v3`                                                                                 |
 | `verify_ssl`       | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates          |
 | `signature_method` | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
@@ -71,6 +90,10 @@ woocommerce = WooCommerce::API.new(
 
 - `.delete(endpoint, query)`
 
+### OPTIONS
+
+- `.options(endpoint)`
+
 #### Response
 
 All methods will return [HTTParty::Response](https://github.com/jnunemaker/httparty) object.
@@ -93,6 +116,7 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
+- 2016-05-09 - 1.2.0 - Added support for WP REST API and added method to do HTTP OPTIONS requests..
 - 2015-12-07 - 1.1.2 - Stop send `body` in GET and DELETE requests.
 - 2015-12-07 - 1.1.1 - Fixed the encode when have spaces in the URL parameters.
 - 2015-08-27 - 1.1.0 - Added `query` argument for GET and DELETE methods, reduced chance of nonce collisions and added support for urls including ports
