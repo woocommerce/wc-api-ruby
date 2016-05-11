@@ -21,6 +21,7 @@ module WooCommerce
       }
       args = defaults.merge(args)
 
+      @force_auth_params = args[:force_auth_params]
       @version = args[:version]
       @verify_ssl = args[:verify_ssl] == true
       @signature_method = args[:signature_method]
@@ -123,6 +124,14 @@ module WooCommerce
           password: @consumer_secret
         })
       end
+
+      if @force_auth_params
+        options.merge!(query: {
+          username: @consumer_key,
+          password: @consumer_secret
+        })
+      end
+
       options.merge!(body: data.to_json) if !data.empty?
 
       HTTParty.send(method, url, options)
