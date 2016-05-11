@@ -47,6 +47,7 @@ woocommerce = WooCommerce::API.new(
 | `verify_ssl`       | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates          |
 | `signature_method` | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
 | `force_auth_params`| `Bool`   | no       | Force the consumer key and secret to the url parameters                                                      |
+| `debug_mode`       | `Bool`   | no       | Enables HTTParty debug mode                                                                                  |
 
 ## Methods
 

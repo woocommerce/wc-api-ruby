@@ -21,6 +21,7 @@ module WooCommerce
       }
       args = defaults.merge(args)
 
+      @debug_mode = args[:debug_mode]
       @force_auth_params = args[:force_auth_params]
       @version = args[:version]
       @verify_ssl = args[:verify_ssl] == true
@@ -125,10 +126,12 @@ module WooCommerce
         })
       end
 
+      options.merge!(debug_output: $stdout) if @debug_mode
+
       if @force_auth_params
         options.merge!(query: {
-          username: @consumer_key,
-          password: @consumer_secret
+          consumer_key: @consumer_key,
+          consumer_secret: @consumer_secret
         })
       end
 
