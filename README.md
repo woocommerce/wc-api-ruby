@@ -32,7 +32,7 @@ woocommerce = WooCommerce::API.new(
 )
 ```
 
-Setup for the new WP REST API integration:
+Setup for the new WP REST API integration (WooCommerce 2.6 or later):
 
 ```ruby
 require "woocommerce_api"
@@ -61,7 +61,7 @@ woocommerce = WooCommerce::API.new(
 
 |       Option       |   Type   | Required |                                                 Description                                                  |
 |--------------------|----------|----------|--------------------------------------------------------------------------------------------------------------|
-| `wp_api`           | `Bool`   | no       | Allow requests to the WP REST API                                                                            |
+| `wp_api`           | `Bool`   | no       | Allow requests to the WP REST API (WooCommerce 2.6 or later)                                                 |
 | `version`          | `String` | no       | API version, default is `v3`                                                                                 |
 | `verify_ssl`       | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates          |
 | `signature_method` | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
