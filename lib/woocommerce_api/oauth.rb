@@ -67,7 +67,7 @@ module WooCommerce
         .join("%26")
       string_to_sign = "#{@method}&#{base_request_uri}&#{query_string}"
 
-      if @version == "v3"
+      if !["v1", "v2"].include? @version
         consumer_secret = "#{@consumer_secret}&"
       else
         consumer_secret = @consumer_secret
