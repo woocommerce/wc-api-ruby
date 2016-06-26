@@ -116,7 +116,8 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
-- 2016-05-09 - 1.2.0 - Added support for WP REST API and added method to do HTTP OPTIONS requests..
+- 2016-06-26 - 1.2.1 - Fixed oAuth signature for WP REST API.
+- 2016-05-09 - 1.2.0 - Added support for WP REST API and added method to do HTTP OPTIONS requests.
 - 2015-12-07 - 1.1.2 - Stop send `body` in GET and DELETE requests.
 - 2015-12-07 - 1.1.1 - Fixed the encode when have spaces in the URL parameters.
 - 2015-08-27 - 1.1.0 - Added `query` argument for GET and DELETE methods, reduced chance of nonce collisions and added support for urls including ports
