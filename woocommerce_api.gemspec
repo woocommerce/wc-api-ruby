@@ -8,7 +8,7 @@ require "woocommerce_api/version"
 Gem::Specification.new do |s|
   s.name        = "woocommerce_api"
   s.version     = WooCommerce::VERSION
-  s.date        = "2016-05-09"
+  s.date        = "2016-09-16"
 
   s.summary     = "A Ruby wrapper for the WooCommerce API"
   s.description = "This gem provide a wrapper to deal with the WooCommerce REST API"
