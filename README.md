@@ -59,12 +59,14 @@ woocommerce = WooCommerce::API.new(
 
 #### Args options
 
-|       Option       |   Type   | Required |                                                 Description                                                  |
-|--------------------|----------|----------|--------------------------------------------------------------------------------------------------------------|
-| `wp_api`           | `Bool`   | no       | Allow requests to the WP REST API (WooCommerce 2.6 or later)                                                 |
-| `version`          | `String` | no       | API version, default is `v3`                                                                                 |
-| `verify_ssl`       | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates          |
-| `signature_method` | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
+|        Option       |   Type   | Required |                                                 Description                                                  |
+|---------------------|----------|----------|--------------------------------------------------------------------------------------------------------------|
+| `wp_api`            | `Bool`   | no       | Allow requests to the WP REST API (WooCommerce 2.6 or later)                                                 |
+| `version`           | `String` | no       | API version, default is `v3`                                                                                 |
+| `verify_ssl`        | `Bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates          |
+| `signature_method`  | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
+| `query_string_auth` | `Bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`             |
+| `debug_mode`        | `Bool`   | no       | Enables HTTParty debug mode                                                                                  |
 
 ## Methods
 

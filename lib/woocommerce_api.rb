@@ -26,6 +26,8 @@ module WooCommerce
       @version = args[:version]
       @verify_ssl = args[:verify_ssl] == true
       @signature_method = args[:signature_method]
+      @debug_mode = args[:debug_mode]
+      @query_string_auth = args[:query_string_auth]
 
       # Internal args
       @is_ssl = @url.start_with? "https"
@@ -129,12 +131,23 @@ module WooCommerce
           "Accept" => "application/json"
         }
       }
+
+      # Set basic authentication.
       if @is_ssl
-        options.merge!(basic_auth: {
-          username: @consumer_key,
-          password: @consumer_secret
-        })
+        if @query_string_auth
+          options.merge!(query: {
+            consumer_key: @consumer_key,
+            consumer_secret: @consumer_secret
+          })
+        else
+          options.merge!(basic_auth: {
+            username: @consumer_key,
+            password: @consumer_secret
+          })
+        end
       end
+
+      options.merge!(debug_output: $stdout) if @debug_mode
       options.merge!(body: data.to_json) if !data.empty?
 
       HTTParty.send(method, url, options)
