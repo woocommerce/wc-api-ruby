@@ -15,9 +15,9 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.authors     = ["Claudio Sanches"]
-  s.email       = "claudio@woothemes.com"
+  s.email       = "claudio@automattic.com"
   s.files       = Dir["lib/woocommerce_api.rb", "lib/woocommerce_api/*.rb"]
-  s.homepage    = "https://github.com/woothemes/wc-api-ruby"
+  s.homepage    = "https://github.com/woocommerce/wc-api-ruby"
 
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]

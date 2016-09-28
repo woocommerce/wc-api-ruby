@@ -2,7 +2,7 @@
 
 A Ruby wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API using this library.
 
-[![build status](https://secure.travis-ci.org/woothemes/wc-api-ruby.svg)](http://travis-ci.org/woothemes/wc-api-ruby)
+[![build status](https://secure.travis-ci.org/woocommerce/wc-api-ruby.svg)](http://travis-ci.org/woocommerce/wc-api-ruby)
 [![gem version](https://badge.fury.io/rb/woocommerce_api.svg)](https://rubygems.org/gems/woocommerce_api)
 
 ## Installation
@@ -13,10 +13,10 @@ gem install woocommerce_api
 
 ## Getting started
 
-Generate API credentials (Consumer Key & Consumer Secret) following this instructions <http://docs.woothemes.com/document/woocommerce-rest-api/>
+Generate API credentials (Consumer Key & Consumer Secret) following this instructions <http://docs.woocommerce.com/document/woocommerce-rest-api/>
 .
 
-Check out the WooCommerce API endpoints and data that can be manipulated in <http://woothemes.github.io/woocommerce-rest-api-docs/>.
+Check out the WooCommerce API endpoints and data that can be manipulated in <https://woocommerce.github.io/woocommerce-rest-api-docs/>.
 
 ## Setup
 
