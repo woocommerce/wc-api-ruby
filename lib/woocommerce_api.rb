@@ -18,7 +18,8 @@ module WooCommerce
         wp_api: false,
         version: "v3",
         verify_ssl: true,
-        signature_method: "HMAC-SHA256"
+        signature_method: "HMAC-SHA256",
+        http_args: {}
       }
       args = defaults.merge(args)
 
@@ -28,6 +29,7 @@ module WooCommerce
       @signature_method = args[:signature_method]
       @debug_mode = args[:debug_mode]
       @query_string_auth = args[:query_string_auth]
+      @http_args = args[:http_args]
 
       # Internal args
       @is_ssl = @url.start_with? "https"
@@ -122,6 +124,7 @@ module WooCommerce
     # Returns the response in JSON String.
     def do_request method, endpoint, data = {}
       url = get_url(endpoint, method)
+      
       options = {
         format: :json,
         verify: @verify_ssl,
@@ -131,6 +134,9 @@ module WooCommerce
           "Accept" => "application/json"
         }
       }
+
+      # Fold in any options supplied to the constructor, (eg. timeout)
+      options = @http_args.merge(options)
 
       # Set basic authentication.
       if @is_ssl
