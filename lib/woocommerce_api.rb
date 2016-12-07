@@ -122,14 +122,15 @@ module WooCommerce
     # Returns the response in JSON String.
     def do_request method, endpoint, data = {}
       url = get_url(endpoint, method)
+      headers = {
+        "User-Agent" => "WooCommerce API Client-Ruby/#{WooCommerce::VERSION}",
+        "Accept" => "application/json"
+      }
+      headers["Content-Type"] = "application/json;charset=utf-8" if !data.empty?
       options = {
         format: :json,
         verify: @verify_ssl,
-        headers: {
-          "User-Agent" => "WooCommerce API Client-Ruby/#{WooCommerce::VERSION}",
-          "Content-Type" => "application/json;charset=utf-8",
-          "Accept" => "application/json"
-        }
+        headers: headers
       }
 
       # Set basic authentication.
