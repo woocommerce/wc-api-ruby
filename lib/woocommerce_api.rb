@@ -19,7 +19,7 @@ module WooCommerce
         version: "v3",
         verify_ssl: true,
         signature_method: "HMAC-SHA256",
-        http_args: {}
+        httparty_args: {}
       }
       args = defaults.merge(args)
 
@@ -29,7 +29,7 @@ module WooCommerce
       @signature_method = args[:signature_method]
       @debug_mode = args[:debug_mode]
       @query_string_auth = args[:query_string_auth]
-      @http_args = args[:http_args]
+      @httparty_args = args[:httparty_args]
 
       # Internal args
       @is_ssl = @url.start_with? "https"
@@ -124,22 +124,24 @@ module WooCommerce
     # Returns the response in JSON String.
     def do_request method, endpoint, data = {}
       url = get_url(endpoint, method)
-      headers = {
+      options = {
+        format: :json
+      }
+
+      # Allow custom HTTParty args.
+      options = @httparty_args.merge(options)
+
+      # Set headers.
+      options[:headers] = {
         "User-Agent" => "WooCommerce API Client-Ruby/#{WooCommerce::VERSION}",
         "Accept" => "application/json"
       }
-      headers["Content-Type"] = "application/json;charset=utf-8" if !data.empty?
-      options = {
-        format: :json,
-        verify: @verify_ssl,
-        headers: headers
-      }
-
-      # Fold in any options supplied to the constructor, (eg. timeout)
-      options = @http_args.merge(options)
+      options[:headers]["Content-Type"] = "application/json;charset=utf-8" if !data.empty?
 
       # Set basic authentication.
       if @is_ssl
+        options[:verify] = @verify_ssl
+
         if @query_string_auth
           options.merge!(query: {
             consumer_key: @consumer_key,
