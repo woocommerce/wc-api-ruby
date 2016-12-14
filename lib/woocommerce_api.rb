@@ -18,7 +18,8 @@ module WooCommerce
         wp_api: false,
         version: "v3",
         verify_ssl: true,
-        signature_method: "HMAC-SHA256"
+        signature_method: "HMAC-SHA256",
+        http_args: {}
       }
       args = defaults.merge(args)
 
@@ -28,6 +29,7 @@ module WooCommerce
       @signature_method = args[:signature_method]
       @debug_mode = args[:debug_mode]
       @query_string_auth = args[:query_string_auth]
+      @http_args = args[:http_args]
 
       # Internal args
       @is_ssl = @url.start_with? "https"
@@ -132,6 +134,9 @@ module WooCommerce
         verify: @verify_ssl,
         headers: headers
       }
+
+      # Fold in any options supplied to the constructor, (eg. timeout)
+      options = @http_args.merge(options)
 
       # Set basic authentication.
       if @is_ssl

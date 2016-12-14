@@ -67,6 +67,7 @@ woocommerce = WooCommerce::API.new(
 | `signature_method`  | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
 | `query_string_auth` | `Bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`             |
 | `debug_mode`        | `Bool`   | no       | Enables HTTParty debug mode                                                                                  |
+| `http_args`         | `Hash`   | no       | Allows extra arbitrary args to be passed to HTTParty, for example, `timeout:` if the default 10 seconds isn't long enough to allow multiple image uploads            |
 
 ## Methods
 
