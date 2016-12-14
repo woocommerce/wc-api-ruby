@@ -5,6 +5,4 @@ rvm:
  - 2.2.1
  - 2.3.0
  - ruby-head
- - jruby
- - rbx-2
 script: bundle exec rake test
