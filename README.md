@@ -20,18 +20,6 @@ Check out the WooCommerce API endpoints and data that can be manipulated in <htt
 
 ## Setup
 
-Setup for the old WooCommerce API v3:
-
-```ruby
-require "woocommerce_api"
-
-woocommerce = WooCommerce::API.new(
-  "http://example.com",
-  "ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  "cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-)
-```
-
 Setup for the new WP REST API integration (WooCommerce 2.6 or later):
 
 ```ruby
@@ -44,6 +32,21 @@ woocommerce = WooCommerce::API.new(
   {
     wp_api: true,
     version: "wc/v1"
+  }
+)
+```
+
+Setup for the WooCommerce legacy API:
+
+```ruby
+require "woocommerce_api"
+
+woocommerce = WooCommerce::API.new(
+  "http://example.com",
+  "ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  {
+    version: "v3"
   }
 )
 ```
@@ -67,7 +70,7 @@ woocommerce = WooCommerce::API.new(
 | `signature_method`  | `String` | no       | Signature method used for oAuth requests, works with `HMAC-SHA1` and `HMAC-SHA256`, default is `HMAC-SHA256` |
 | `query_string_auth` | `Bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`             |
 | `debug_mode`        | `Bool`   | no       | Enables HTTParty debug mode                                                                                  |
-| `http_args`         | `Hash`   | no       | Allows extra arbitrary args to be passed to HTTParty, for example, `timeout:` if the default 10 seconds isn't long enough to allow multiple image uploads            |
+| `httparty_args`     | `Hash`   | no       | Allows extra HTTParty args                                                                                   |
 
 ## Methods
 
@@ -119,6 +122,7 @@ puts response.headers["x-wc-totalpages"] # Total of pages
 
 ## Release History
 
+- 2016-12-14 - 1.4.0 - Introduces `httparty_args` arg and fixed compatibility with WordPress 4.7.
 - 2016-09-15 - 1.3.0 - Added the `query_string_auth` and `debug_mode` options.
 - 2016-06-26 - 1.2.1 - Fixed oAuth signature for WP REST API.
 - 2016-05-09 - 1.2.0 - Added support for WP REST API and added method to do HTTP OPTIONS requests.
