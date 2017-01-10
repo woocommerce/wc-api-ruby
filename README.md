@@ -110,7 +110,7 @@ response = api.get "customers"
 puts response.parsed_response # A Hash of the parsed JSON response
 # Example: {"customers"=>[{"id"=>8, "created_at"=>"2015-05-06T17:43:51Z", "email"=>
 
-puts response.code # A Interger of the HTTP code response
+puts response.code # A Integer of the HTTP code response
 # Example: 200
 
 puts response.headers["x-wc-total"] # Total of items
