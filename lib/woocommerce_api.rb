@@ -129,7 +129,7 @@ module WooCommerce
       }
 
       # Allow custom HTTParty args.
-      options = @httparty_args.merge(options)
+      options = options.merge(@httparty_args)
 
       # Set headers.
       options[:headers] = {
