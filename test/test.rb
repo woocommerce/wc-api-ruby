@@ -16,7 +16,6 @@ class WooCommerceAPITest < Minitest::Test
       "user",
       "pass"
     )
-
   end
 
   def test_basic_auth_get
