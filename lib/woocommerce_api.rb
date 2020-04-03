@@ -132,11 +132,12 @@ module WooCommerce
       options = options.merge(@httparty_args)
 
       # Set headers.
-      options[:headers] = {
+      default_headers = {
         "User-Agent" => "WooCommerce API Client-Ruby/#{WooCommerce::VERSION}",
         "Accept" => "application/json"
       }
-      options[:headers]["Content-Type"] = "application/json;charset=utf-8" if !data.empty?
+      options[:headers] = default_headers.merge(options[:headers] || {})
+      options[:headers]["Content-Type"] ||= "application/json;charset=utf-8" if !data.empty?
 
       # Set basic authentication.
       if @is_ssl
