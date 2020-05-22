@@ -42,7 +42,7 @@ module WooCommerce
       params["oauth_timestamp"] = Time.new.to_i
       params["oauth_signature"] = CGI::escape(generate_oauth_signature(params, url))
 
-      query_string = URI::encode(params.map{|key, value| "#{key}=#{value}"}.join("&"))
+      query_string = URI.encode_www_form(params)
 
       "#{url}?#{query_string}"
     end

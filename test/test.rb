@@ -175,7 +175,7 @@ class WooCommerceAPITest < Minitest::Test
 
   def test_adding_query_params
     url = @oauth.send(:add_query_params, 'foo.com', filter: { sku: '123' }, order: 'created_at')
-    assert_equal url, URI.encode('foo.com?filter[sku]=123&order=created_at')
+    assert_equal url, 'foo.com?filter%5Bsku%5D=123&order=created_at'
   end
 
   def test_invalid_signature_method
