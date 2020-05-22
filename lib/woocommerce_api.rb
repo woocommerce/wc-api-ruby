@@ -97,7 +97,7 @@ module WooCommerce
 
       endpoint += "?" unless endpoint.include? "?"
       endpoint += "&" unless endpoint.end_with? "?"
-      endpoint + URI.encode(flatten_hash(data).join("&"))
+      endpoint + URI.encode_www_form(flatten_hash(data))
     end
 
     # Internal: Get URL for requests
@@ -189,12 +189,12 @@ module WooCommerce
         case value
         when Hash
           value.map do |inner_key, inner_value|
-            "#{key}[#{inner_key}]=#{inner_value}"
+            ["#{key}[#{inner_key}]", "#{inner_value}"]
           end
         when Array
-          value.map { |inner_value| "#{key}[]=#{inner_value}" }
+          value.map { |inner_value| ["#{key}[]", "#{inner_value}"] }
         else
-          "#{key}=#{value}"
+          [["#{key}", "#{value}"]]
         end
       end
     end
