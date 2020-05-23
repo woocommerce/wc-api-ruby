@@ -5,4 +5,6 @@ rvm:
  - 2.2.1
  - 2.3.0
  - ruby-head
+before_install:
+ - gem install bundler:1.12.5
 script: bundle exec rake test
