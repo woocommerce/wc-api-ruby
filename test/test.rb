@@ -139,7 +139,7 @@ class WooCommerceAPITest < Minitest::Test
     response = @basic_auth.delete "products/1234?force=true"
 
     assert_equal 202, response.code
-    assert_equal '{"message":"Permanently deleted product"}', response.to_json
+    assert_equal '{"message":"Permanently deleted product"}', response.body
   end
 
   def test_basic_auth_delete_params
@@ -157,7 +157,7 @@ class WooCommerceAPITest < Minitest::Test
     response = @basic_auth.delete "products/1234", force: true
 
     assert_equal 202, response.code
-    assert_equal '{"message":"Permanently deleted product"}', response.to_json
+    assert_equal '{"message":"Permanently deleted product"}', response.body
   end
 
   def test_oauth_delete
@@ -170,7 +170,7 @@ class WooCommerceAPITest < Minitest::Test
     response = @oauth.delete "products/1234?force=true"
 
     assert_equal 202, response.code
-    assert_equal '{"message":"Permanently deleted product"}', response.to_json
+    assert_equal '{"message":"Permanently deleted product"}', response.body
   end
 
   def test_adding_query_params
