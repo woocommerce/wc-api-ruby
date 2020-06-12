@@ -6,5 +6,5 @@ gem "json"
 group :test do
   gem "rake"
   gem "minitest"
-  gem "fakeweb"
+  gem "webmock"
 end
