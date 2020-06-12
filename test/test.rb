@@ -160,7 +160,7 @@ class WooCommerceAPITest < Minitest::Test
     assert_equal '{"message":"Permanently deleted product"}', response.to_json
   end
 
-  def test_oauth_put
+  def test_oauth_delete
     stub_request(:delete, /http:\/\/dev\.test\/wc-api\/v3\/products\/1234\?force=true&oauth_consumer_key=user&oauth_nonce=(.*)&(.*)oauth_signature_method=HMAC-SHA256&oauth_timestamp=(.*)/).and_return(
       body: '{"message":"Permanently deleted product"}',
       headers: { content_type: "application/json" },
